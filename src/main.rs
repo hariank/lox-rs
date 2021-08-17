@@ -2,7 +2,9 @@ use std::io;
 use std::io::Write;
 use structopt::StructOpt;
 
+mod lexer;
 mod treewalk;
+mod utils;
 
 #[derive(StructOpt)]
 struct Args {
@@ -27,7 +29,7 @@ fn run_file(source_path: &str) {
             panic!("Error reading source {}", error);
         }
     };
-    run(&content);
+    run(content);
 }
 
 static PROMPT: &str = ">>>  ";
@@ -42,7 +44,7 @@ fn run_prompt() {
             if num_bytes == 0 {
                 break;
             }
-            run(&input.trim().to_string());
+            run(input.trim().to_string());
         } else {
             println!("Error parsing");
             break;
@@ -50,6 +52,6 @@ fn run_prompt() {
     }
 }
 
-fn run(source: &str) {
-    treewalk::Interpreter::new().run();
+fn run(source: String) {
+    treewalk::Interpreter::new().run(source);
 }
